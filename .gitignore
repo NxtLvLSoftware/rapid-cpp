@@ -1,0 +1,4 @@
+.idea
+cmake-build-debug
+
+*-config-version.cmake
