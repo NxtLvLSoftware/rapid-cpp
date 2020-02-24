@@ -38,18 +38,21 @@ template <class T>
 unsigned long NetworkInterface<T>::nextSessionIdentifier() const noexcept {
   return sessionCount++;
 }
+
 template <class T>
-void NetworkInterface<T>::addSession(std::shared_ptr<T> session) const
+void NetworkInterface<T>::addSession(std::unique_ptr<T> &session) const
     noexcept {
   sessions.insert(session->getIdentifier(), session);
 }
+
 template <class T>
-std::shared_ptr<T> NetworkInterface<T>::getSession(const long identifier) const
-    noexcept {
+const std::unique_ptr<T> &
+NetworkInterface<T>::getSession(const long identifier) const noexcept {
   return sessions[identifier];
 }
+
 template <class T>
-void NetworkInterface<T>::removeSession(std::shared_ptr<T> session) const
+void NetworkInterface<T>::removeSession(const std::unique_ptr<T> &session) const
     noexcept {
   sessions.erase(session->getIdentifier());
 }

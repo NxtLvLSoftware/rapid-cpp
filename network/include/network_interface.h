@@ -45,10 +45,8 @@ namespace rapid::network {
  *
  * @tparam T The network session class type to use.
  */
-template <class T>
-class NetworkInterface {
+template <class T> class NetworkInterface {
 public:
-
   NetworkInterface() = default;
 
   /**
@@ -63,7 +61,7 @@ public:
    *
    * @param session The session instance to add.
    */
-  void addSession(std::shared_ptr<T> session) const noexcept;
+  void addSession(std::unique_ptr<T> &session) const noexcept;
 
   /**
    * Retrieve a network session instance using its identifier.
@@ -71,27 +69,26 @@ public:
    * @param identifier The unique session identifier.
    * @return The session corresponding to the identifier.
    */
-  [[nodiscard]] std::shared_ptr<T> getSession(const long identifier) const noexcept;
+  [[nodiscard]] const std::unique_ptr<T> &
+  getSession(const long identifier) const noexcept;
 
   /**
    * Remove a session from the manager
    *
    * @param session The session instance to remove.
    */
-  void removeSession(std::shared_ptr<T> session) const noexcept;
+  void removeSession(const std::unique_ptr<T> &session) const noexcept;
 
 private:
-
   /**
    * A simple counter used for assigning sessions unique ids.
    */
-   std::atomic_ulong sessionCount{0};
+  std::atomic_ulong sessionCount{0};
 
-   /**
-    * Mapping of session identifiers to session instances.
-    */
-   folly::AtomicHashMap<unsigned long, std::shared_ptr<T>> sessions;
-
+  /**
+   * Mapping of session identifiers to session instances.
+   */
+  folly::AtomicHashMap<unsigned long, std::unique_ptr<T>> sessions;
 };
 
 } // namespace rapid::network
