@@ -27,8 +27,13 @@ set(CMAKE_INSTALL_DIR "lib/cmake/${PROJECT}" CACHE STRING
 set(RAPID_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_DIR}-${VERSION}" CACHE STRING
   "The subdirectory where CMake package config files should be installed")
 
+option(BUILD_SUPPORT "Enable building support library." ON)
 option(BUILD_EVENT "Enable building event library." ON)
 option(BUILD_NETWORK "Enable building network library." ON)
+
+if(BUILD_SUPPORT)
+    add_subdirectory(support)
+endif()
 
 if(BUILD_EVENT)
 #    add_subdirectory(event)

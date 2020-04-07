@@ -2,23 +2,17 @@ rapid-framework
 ===================
 __The framework for rapid software development.__
 
-## About
-
-Rapid is a collection of C++ modules that you can use to help build applications. Currently the modules are under heavy
-development and and are subject to change without notice.
-
 ## support
 
 The support library is a module designed to provide a collection of support class & functions that don't warrant separate
 components.
 
-## network
+## Compiling
 
-The network library is a module designed to provide a starting place for managing protocol-based network interfaces in
-your applications. It provides default implementations for managing multiple network interfaces, interface
-sessions/connections, packet definitions, packet serialization/codec & more. Being built on top of [Wangle](https://github.com/facebook/wangle),
-an existing non-blocking I/O (NIO) networking library developed by Facebook, we have a well built async-first backend ready
-to power this module & your applications.
+The support library compiles as a stand-alone shared library that you can link against, or you can optionally
+statically compile it directly into your application. Once you have all the required dependencies installed it's as simple
+as running cmake and installing the resulting build into your system paths. You can then link against the `rapid::support`
+library target in your CMakeLists.txt.
 
 ## License Information
 
