@@ -33,11 +33,35 @@
 #ifndef RAPID_NETWORK_INCLUDE_NETWORK_INTERFACE_H
 #define RAPID_NETWORK_INCLUDE_NETWORK_INTERFACE_H
 
-#include <folly/AtomicHashMap.h>
 #include <memory>
 #include <mutex>
 
+#include <folly/AtomicHashMap.h>
+
 namespace rapid::network {
+
+/**
+ * Base interface defining common methods for a network interface. This
+ * base type can be used where we don't need to know the underlying
+ * session type.
+ */
+class INetworkInterface {
+private:
+  /**
+   * A simple counter used for assigning sessions unique ids.
+   */
+  std::atomic_ulong sessionCount{0};
+
+public:
+  INetworkInterface() = default;
+
+  /**
+   * Retrieve the next usable session identifier.
+   *
+   * @return A new unique session identifier.
+   */
+  [[nodiscard]] unsigned long nextSessionIdentifier() noexcept;
+};
 
 /**
  * A network interface is responsible for managing a group of sessions for a
@@ -45,16 +69,9 @@ namespace rapid::network {
  *
  * @tparam T The network session class type to use.
  */
-template <class T> class NetworkInterface {
+template <class T> class NetworkInterface : public INetworkInterface {
 public:
   NetworkInterface() = default;
-
-  /**
-   * Retrieve the next usable session identifier.
-   *
-   * @return A new unique session identifier.
-   */
-  [[nodiscard]] unsigned long nextSessionIdentifier() const noexcept;
 
   /**
    * Register a network session to the interface.
@@ -80,11 +97,6 @@ public:
   void removeSession(const std::unique_ptr<T> &session) const noexcept;
 
 private:
-  /**
-   * A simple counter used for assigning sessions unique ids.
-   */
-  std::atomic_ulong sessionCount{0};
-
   /**
    * Mapping of session identifiers to session instances.
    */

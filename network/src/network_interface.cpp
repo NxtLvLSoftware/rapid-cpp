@@ -34,9 +34,8 @@
 
 namespace rapid::network {
 
-template <class T>
-unsigned long NetworkInterface<T>::nextSessionIdentifier() const noexcept {
-  return sessionCount++;
+unsigned long INetworkInterface::nextSessionIdentifier() noexcept {
+  return ++sessionCount;
 }
 
 template <class T>
