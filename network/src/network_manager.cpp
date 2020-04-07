@@ -30,42 +30,18 @@
  *
  */
 
-#ifndef RAPID_NETWORK_INCLUDE_NETWORK_MANAGER_H
-#define RAPID_NETWORK_INCLUDE_NETWORK_MANAGER_H
-
-#include "network_interface.h"
-
-#include <memory>
-
-#include <folly/AtomicHashMap.h>
-#include <rapid/support/type_identifier.h>
+#include "../include/network_manager.h"
 
 namespace rapid::network {
 
-class NetworkManager {
-private:
-  folly::AtomicHashMap<support::TypeIdentifier,
-                       std::unique_ptr<INetworkInterface>>
-      interfaces;
+template <typename T>
+void NetworkManager::addInterface(std::unique_ptr<T> interface) {
+  interfaces.insert(rapid::support::type_id<T>(), std::move(interface));
+}
 
-public:
-  /**
-   * Add a network interface to the network manager.
-   *
-   * @tparam T The type of interface to add.
-   * @param interface The network interface.
-   */
-  template <typename T> void addInterface(std::unique_ptr<T> interface);
-
-  /**
-   * Retrieve a network interface from its type.
-   *
-   * @tparam T The type of interface to retrieve.
-   * @return The registered interface corresponding to the template type.
-   */
-  template <typename T> std::unique_ptr<T> &getInterface() const noexcept;
-};
+template <typename T>
+std::unique_ptr<T> &NetworkManager::getInterface() const noexcept {
+  return interfaces[rapid::support::type_id<T>()];
+}
 
 } // namespace rapid::network
-
-#endif // RAPID_NETWORK_INCLUDE_NETWORK_MANAGER_H

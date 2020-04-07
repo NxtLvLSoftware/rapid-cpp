@@ -15,6 +15,8 @@ find_package(wangle CONFIG REQUIRED)
 
 find_package(Boost REQUIRED COMPONENTS system thread filesystem regex context program_options)
 
+find_package(rapid REQUIRED COMPONENTS support)
+
 find_package(Threads REQUIRED)
 
 # Gather the library headers & sources
@@ -32,6 +34,7 @@ target_include_directories(${COMPONENT}
 )
 target_link_libraries(${COMPONENT}
   PUBLIC
+    rapid::support
     ${FOLLY_LIBRARIES}
     ${FIZZ_LIBRARIES}
     ${WANGLE_LIBRARIES}
